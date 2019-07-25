@@ -4,6 +4,7 @@ import mixins, { DEVICE_WIDTH } from '../app/styles.js';
 const styles = StyleSheet.create({
   scrollView: {
     marginHorizontal: mixins.indent.doubleMiddle,
+    backgroundColor: mixins.color.white,
   },
   image: {
     width: DEVICE_WIDTH,

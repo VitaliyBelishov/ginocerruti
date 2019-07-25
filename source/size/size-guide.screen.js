@@ -8,6 +8,7 @@ import {
   StatusBar,
   Image,
   Switch,
+  Keyboard,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Button from '../form/button.js';
@@ -16,7 +17,6 @@ import { sizes, sizesList } from '../size/size.const.js';
 
 import mixins, { IS_IOS } from '../app/styles.js';
 import styles from './size-guide.screen.style.js';
-
 
 const TitleText = props => (
   <View style={styles.titleView}>
@@ -35,22 +35,29 @@ class SizeGuide extends React.Component {
     calculateSize: '',
   };
 
-  onChangeSizeOption = parameter => this.setState({ sizeOption: parameter });
-  onChangeText = (text, key) => this.setState({ [key]: text });
+  onChangeSizeOption = option => this.setState({ sizeOption: option, calculateSize: '' });
+
+  onChangeText = (text, key) => this.setState({ [key]: text, calculateSize: '' });
+
+  convertSmToInches = value => {
+    if (this.state.sizeOption === 'sm') return value;
+    return (value / 2.54).toFixed(2);
+  }
 
   calculate = () => {
+    Keyboard.dismiss();
     const bust = parseFloat(this.state.bust);
     const weist = parseFloat(this.state.weist);
     const hips = parseFloat(this.state.hips);
     let maxSize = '';
     sizesList.map(size => {
-      if (bust - sizes.bust[size] >= 0) {
+      if (bust >= this.convertSmToInches(sizes.bust.gino[size])) {
         maxSize = size;
       }
-      if (weist - sizes.weist[size] >= 0) {
+      if (weist >= this.convertSmToInches(sizes.weist.gino[size])) {
         maxSize = size;
       }
-      if (hips - sizes.hips[size] >= 0) {
+      if (hips >= this.convertSmToInches(sizes.hips.gino[size])) {
         maxSize = size;
       }
       return size;
@@ -58,9 +65,12 @@ class SizeGuide extends React.Component {
     if (maxSize) this.setState({ calculateSize: maxSize });
   };
 
-  convertSizeOption = () => {
-
+  _focusNextField(nextField) {
+    if (this.refs[nextField] && this.refs[nextField].refs && this.refs[nextField].refs[nextField]) {
+      this.refs[nextField].refs[nextField].focus();
+    }
   }
+
 
   render() {
     const { sizeOption, bust, weist, hips, calculateSize } = this.state;
@@ -74,6 +84,7 @@ class SizeGuide extends React.Component {
             style={styles.scrollView}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
+            enableOnAndroid
           >
             <React.Fragment>
               <TitleText text="Whats my size ?" />
@@ -130,8 +141,11 @@ class SizeGuide extends React.Component {
                       placeholder="Bust"
                       value={bust}
                       onChange={text => this.onChangeText(text, 'bust')}
-                      returnKeyType="done"
                       keyboardType="numeric"
+                      returnKeyType={IS_IOS ? 'done' : 'next'}
+                      ref="bust"
+                      name="bust"
+                      {...(IS_IOS ? {} : { onSubmitEditing: () => this._focusNextField('weist')})}
                     />
                   </View>
                   <View style={styles.inputWrapMiddle}>
@@ -143,8 +157,11 @@ class SizeGuide extends React.Component {
                       placeholder="Weist"
                       value={weist}
                       onChange={text => this.onChangeText(text, 'weist')}
-                      returnKeyType="done"
                       keyboardType="numeric"
+                      returnKeyType={IS_IOS ? 'done' : 'next'}
+                      ref="weist"
+                      name="weist"
+                      {...(IS_IOS ? {} : { onSubmitEditing: () => this._focusNextField('hips')})}
                     />
                   </View>
                   <View style={styles.inputWrap}>
@@ -158,6 +175,9 @@ class SizeGuide extends React.Component {
                       onChange={text => this.onChangeText(text, 'hips')}
                       returnKeyType="done"
                       keyboardType="numeric"
+                      ref="hips"
+                      name="hips"
+                      onSubmitEditing={this.calculate}
                     />
                   </View>
                 </View>
@@ -173,7 +193,7 @@ class SizeGuide extends React.Component {
                       <Text style={styles.calculateText}>
                         Your UK Size is:
                         <Text style={styles.calculateResultTextBold}>
-                          {` ${sizes.UK[calculateSize]}`}
+                          {` ${sizes.UK.gino[calculateSize]}`}
                         </Text>
                       </Text>
                     </View>
