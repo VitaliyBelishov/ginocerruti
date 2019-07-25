@@ -12,8 +12,11 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Button from '../form/button.js';
 import InputText from '../form/input-text.js';
+import { sizes, sizesList } from '../size/size.const.js';
 
+import mixins from '../app/styles.js';
 import styles from './size-guide.screen.style.js';
+
 
 const TitleText = props => (
   <View style={styles.titleView}>
@@ -26,13 +29,37 @@ const TitleText = props => (
 class SizeGuide extends React.Component {
   state = {
     sizeParameter: 'sm',
+    bust: '',
+    weist: '',
+    hips: '',
+    calculateSize: '',
   };
 
   onChangeSizeParameter = parameter => this.setState({ sizeParameter: parameter });
   onChangeText = (text, key) => this.setState({ [key]: text });
 
+  calculate = () => {
+    const bust = parseFloat(this.state.bust);
+    const weist = parseFloat(this.state.weist);
+    const hips = parseFloat(this.state.hips);
+    let maxSize = '';
+    sizesList.map(size => {
+      if (bust - sizes.bust[size] >= 0) {
+        maxSize = size;
+      }
+      if (weist - sizes.weist[size] >= 0) {
+        maxSize = size;
+      }
+      if (hips - sizes.hips[size] >= 0) {
+        maxSize = size;
+      }
+      return size;
+    });
+    if (maxSize) this.setState({ calculateSize: maxSize });
+  };
+
   render() {
-    console.log(this.state);
+    const { sizeParameter, bust, weist, hips, calculateSize } = this.state;
     return (
       <React.Fragment>
         <StatusBar barStyle="dark-content" />
@@ -41,6 +68,7 @@ class SizeGuide extends React.Component {
             contentInsetAdjustmentBehavior="automatic"
             style={styles.scrollView}
             keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
             <React.Fragment>
               <TitleText text="Whats my size ?" />
@@ -65,7 +93,7 @@ class SizeGuide extends React.Component {
               </View>
               <TitleText text="Size calculator" />
               <View style={styles.calculateContainer}>
-                <Text style={styles.collectionsText}>
+                <Text style={styles.calculateText}>
                   Using size chart: Bridesmaids, Evening Wear, Prom Dresses,Lenovia Bridal ,LENOVIA VIP
                 </Text>
                 <View style={styles.switchContainer}>
@@ -73,56 +101,82 @@ class SizeGuide extends React.Component {
                     cm
                   </Text>
                   <Switch
-                    value={this.state.sizeParameter === 'sm'}
-                    style={styles.marginRightDefault}
-                    onChange={() => this.onChangeSizeParameter('sm')}
+                    value={sizeParameter === 'inches'}
+                    style={styles.marginRight}
+                    trackColor={{
+                      false: mixins.color.green,
+                      true: mixins.color.green,
+                    }}
+                    ios_backgroundColor={mixins.color.green}
+                    onValueChange={res => this.onChangeSizeParameter(res ? 'inches' : 'sm')}
                   />
                   <Text style={styles.marginRight}>
                     inches
                   </Text>
-                  <Switch
-                    value={this.state.sizeParameter === 'inches'}
-                    style={styles.marginRight}
-                    onChange={() => this.onChangeSizeParameter('inches')}
-                  />
                 </View>
                 <View style={styles.inputContainer}>
                   <View style={styles.inputWrap}>
+                    <Text style={styles.swithText}>
+                      Bust
+                    </Text>
                     <InputText
                       styleInputInner={styles.input}
                       placeholder="Bust"
-                      value={this.state.bust}
+                      value={bust}
                       onChange={text => this.onChangeText(text, 'bust')}
                       returnKeyType="done"
                       keyboardType="numeric"
                     />
                   </View>
                   <View style={styles.inputWrapMiddle}>
+                    <Text style={styles.swithText}>
+                      Weist
+                    </Text>
                     <InputText
                       styleInputInner={styles.input}
                       placeholder="Weist"
-                      value={this.state.weist}
+                      value={weist}
                       onChange={text => this.onChangeText(text, 'weist')}
                       returnKeyType="done"
                       keyboardType="numeric"
                     />
                   </View>
                   <View style={styles.inputWrap}>
+                    <Text style={styles.swithText}>
+                      Hips
+                    </Text>
                     <InputText
                       styleInputInner={styles.input}
                       placeholder="Hips"
-                      value={this.state.hips}
+                      value={hips}
                       onChange={text => this.onChangeText(text, 'hips')}
                       returnKeyType="done"
                       keyboardType="numeric"
                     />
                   </View>
                 </View>
+                {
+                  calculateSize ? (
+                    <View style={{ flex: 1 }}>
+                      <Text style={styles.calculateText}>
+                        Your size is:
+                        <Text style={styles.calculateResultTextBold}>
+                          {` ${calculateSize}`}
+                        </Text>
+                      </Text>
+                      <Text style={styles.calculateText}>
+                        Your UK Size is:
+                        <Text style={styles.calculateResultTextBold}>
+                          {` ${sizes.UK[calculateSize]}`}
+                        </Text>
+                      </Text>
+                    </View>
+                  ) : null
+                }
                 <Button
-                  // whiteBordered
                   style={styles.buttonCal}
                   success
-                  onPress={() => {}}
+                  onPress={this.calculate}
                 >
                   <Text style={styles.buttonTextCal}>
                     Calculate

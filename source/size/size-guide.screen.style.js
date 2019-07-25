@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 5,
     marginTop: mixins.indent.medial,
+    paddingHorizontal: mixins.indent.big,
+  },
+  buttonText: {
+    fontSize: mixins.indent.medium,
   },
   collectionsContainter: {
     alignItems: 'center',
@@ -31,18 +35,15 @@ const styles = StyleSheet.create({
     marginTop: mixins.indent.doubleMiddle,
   },
   collectionsText: {
-    fontSize: 16,
-  },
-  buttonText: {
-    fontSize: mixins.indent.doubleMiddle,
+    fontSize: 18,
   },
   calculateContainer: {
-    marginTop: mixins.indent.doubleMiddle,
+    // marginTop: mixins.indent.middle,
   },
   switchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 18,
+    marginTop: 24,
   },
   marginRight: {
     marginRight: mixins.indent.medial,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
     height: 42,
     borderWidth: 1,
     borderColor: mixins.color.greyBorderInput,
+    marginVertical: 0,
   },
   inputWrap: {
     flex: 1,
@@ -74,7 +76,18 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonTextCal: {
-    color: 'white',
+    color: mixins.color.white,
+    fontSize: mixins.font.defaultFont,
+  },
+  swithText: {
+    fontSize: mixins.font.smallFont,
+    color: mixins.color.grayText,
+  },
+  calculateText: {
+    fontSize: mixins.font.default,
+  },
+  calculateResultTextBold: {
+    fontWeight: '500',
   },
 });
 
