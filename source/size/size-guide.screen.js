@@ -14,7 +14,7 @@ import Button from '../form/button.js';
 import InputText from '../form/input-text.js';
 import { sizes, sizesList } from '../size/size.const.js';
 
-import mixins from '../app/styles.js';
+import mixins, { IS_IOS } from '../app/styles.js';
 import styles from './size-guide.screen.style.js';
 
 
@@ -28,14 +28,14 @@ const TitleText = props => (
 
 class SizeGuide extends React.Component {
   state = {
-    sizeParameter: 'sm',
+    sizeOption: 'sm',
     bust: '',
     weist: '',
     hips: '',
     calculateSize: '',
   };
 
-  onChangeSizeParameter = parameter => this.setState({ sizeParameter: parameter });
+  onChangeSizeOption = parameter => this.setState({ sizeOption: parameter });
   onChangeText = (text, key) => this.setState({ [key]: text });
 
   calculate = () => {
@@ -58,8 +58,13 @@ class SizeGuide extends React.Component {
     if (maxSize) this.setState({ calculateSize: maxSize });
   };
 
+  convertSizeOption = () => {
+
+  }
+
   render() {
-    const { sizeParameter, bust, weist, hips, calculateSize } = this.state;
+    const { sizeOption, bust, weist, hips, calculateSize } = this.state;
+    console.log('sizeOption =>', sizeOption);
     return (
       <React.Fragment>
         <StatusBar barStyle="dark-content" />
@@ -101,14 +106,15 @@ class SizeGuide extends React.Component {
                     cm
                   </Text>
                   <Switch
-                    value={sizeParameter === 'inches'}
+                    value={sizeOption === 'inches'}
                     style={styles.marginRight}
                     trackColor={{
                       false: mixins.color.green,
                       true: mixins.color.green,
                     }}
+                    thumbColor={IS_IOS ? null : mixins.color.white}
                     ios_backgroundColor={mixins.color.green}
-                    onValueChange={res => this.onChangeSizeParameter(res ? 'inches' : 'sm')}
+                    onValueChange={res => this.onChangeSizeOption(res ? 'inches' : 'sm')}
                   />
                   <Text style={styles.marginRight}>
                     inches
