@@ -53,7 +53,7 @@ const SizeGuide = () => {
   }
 
   const validate = (): boolean => {
-    // setErrorMessage([]);
+    setErrorMessage([]);
     const bustFloat = parseFloat(bust);
     const waistFloat = parseFloat(waist);
     const hipsFloat = parseFloat(hips);

@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     marginHorizontal: mixins.indent.medial,
   },
   buttonCal: {
-    marginTop: mixins.indent.medial,
+    marginVertical: mixins.indent.medial,
     paddingVertical: mixins.indent.default,
     borderRadius: 5,
   },
