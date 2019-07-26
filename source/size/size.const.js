@@ -45,8 +45,8 @@ export const sizes = {
       '8XL': 146,
     },
   },
-  weist: {
-    name: 'Weist',
+  waist: {
+    name: 'Waist',
     gino: {
       'XXXS': 56,
       'XXS': 60,

@@ -29,17 +29,14 @@ const SizeGuide = () => {
   const [sizeOption, setSizeOption] = useState('sm');
   const [calculateSize, setCalculateSize] = useState('');
   const [bust, setBust] = useState('');
-  const [weist, setWeist] = useState('');
+  const [waist, setWaist] = useState('');
   const [hips, setHips] = useState('');
   const [userCountry, setUserCountry] = useState();
   const [errorMessage, setErrorMessage] = useState([]);
-  const bustRef = useRef(null);
-  const weistRef = useRef(null);
-  const hipsRef = useRef(null);
 
   useEffect(() => setUserCountry(DeviceInfo.getDeviceCountry()), []);
 
-  const convertSmToInches = value => {
+  const getSizeByOption = value => {
     if (sizeOption === 'sm') return value;
     return (value / 2.54).toFixed(2);
   }
@@ -47,61 +44,64 @@ const SizeGuide = () => {
   const validate = () => {
     setErrorMessage([]);
     const bustFloat = parseFloat(bust);
-    const weistFloat = parseFloat(weist);
+    const waistFloat = parseFloat(waist);
     const hipsFloat = parseFloat(hips);
     let message = [];
     if (!bustFloat) {
       message = message.concat('Bust is required');
-    }
-    const bustFirstSize = convertSmToInches(sizes.bust.gino[sizesList[0]]);
-    if (bustFloat && bustFloat < bustFirstSize) {
-      message = message.concat(
-        `Bust please enter a value greater than or equal to ${bustFirstSize}.`
+    } else {
+      const bustFirstSize = getSizeByOption(sizes.bust.gino[sizesList[0]]);
+      if (bustFloat < bustFirstSize) {
+        message = message.concat(
+          `Bust please enter a value greater than or equal to ${bustFirstSize}.`
+        );
+      }
+      const bustLastSize = getSizeByOption(
+        sizes.bust.gino[sizesList[sizesList.length - 1]]
       );
-    }
-    const bustLastSize = convertSmToInches(
-      sizes.bust.gino[sizesList[sizesList.length - 1]]
-    );
-    if (bustFloat && bustFloat > bustLastSize) {
-      message = message.concat(
-        `Bust please enter a value less than or equal to ${bustLastSize}.`
-      );
+      if (bustFloat > bustLastSize) {
+        message = message.concat(
+          `Bust please enter a value less than or equal to ${bustLastSize}.`
+        );
+      }
     }
 
-    if (!weistFloat) {
-      message = message.concat('Weist is required');
-    }
-    const weistFirstSize = convertSmToInches(sizes.weist.gino[sizesList[0]]);
-    if (weistFloat && weistFloat < weistFirstSize) {
-      message = message.concat(
-        `Weist please enter a value greater than or equal to ${weistFirstSize}.`
+    if (!waistFloat) {
+      message = message.concat('Waist is required');
+    } else {
+      const waistFirstSize = getSizeByOption(sizes.waist.gino[sizesList[0]]);
+      if (waistFloat < waistFirstSize) {
+        message = message.concat(
+          `Waist please enter a value greater than or equal to ${waistFirstSize}.`
+        );
+      }
+      const waistLastSize = getSizeByOption(
+        sizes.waist.gino[sizesList[sizesList.length - 1]]
       );
-    }
-    const weistLastSize = convertSmToInches(
-      sizes.weist.gino[sizesList[sizesList.length - 1]]
-    );
-    if (weistFloat && weistFloat > weistLastSize) {
-      message = message.concat(
-        `Weist please enter a value less than or equal to ${weistLastSize}.`
-      );
+      if (waistFloat > waistLastSize) {
+        message = message.concat(
+          `Waist please enter a value less than or equal to ${waistLastSize}.`
+        );
+      }
     }
 
     if (!hipsFloat) {
       message = message.concat('Hips is required');
-    }
-    const hipsFirstSize = convertSmToInches(sizes.hips.gino[sizesList[0]]);
-    if (hipsFloat && hipsFloat < hipsFirstSize) {
-      message = message.concat(
-        `Hips please enter a value greater than or equal to ${hipsFirstSize}.`
+    } else {
+      const hipsFirstSize = getSizeByOption(sizes.hips.gino[sizesList[0]]);
+      if (hipsFloat < hipsFirstSize) {
+        message = message.concat(
+          `Hips please enter a value greater than or equal to ${hipsFirstSize}.`
+        );
+      }
+      const hipsLastSize = getSizeByOption(
+        sizes.hips.gino[sizesList[sizesList.length - 1]]
       );
-    }
-    const hipsLastSize = convertSmToInches(
-      sizes.hips.gino[sizesList[sizesList.length - 1]]
-    );
-    if (hipsFloat && hipsFloat > hipsLastSize) {
-      message = message.concat(
-        `Hips please enter a value less than or equal to ${hipsLastSize}.`
-      );
+      if (hipsFloat > hipsLastSize) {
+        message = message.concat(
+          `Hips please enter a value less than or equal to ${hipsLastSize}.`
+        );
+      }
     }
 
     if (message.length) {
@@ -116,17 +116,17 @@ const SizeGuide = () => {
     Keyboard.dismiss();
     if (validate()) {
       const bustFloat = parseFloat(bust);
-      const weistFloat = parseFloat(weist);
+      const waistFloat = parseFloat(waist);
       const hipsFloat = parseFloat(hips);
       let maxSize = '';
       sizesList.map(size => {
-        if (bustFloat >= convertSmToInches(sizes.bust.gino[size])) {
+        if (bustFloat >= getSizeByOption(sizes.bust.gino[size])) {
           maxSize = size;
         }
-        if (weistFloat >= convertSmToInches(sizes.weist.gino[size])) {
+        if (waistFloat >= getSizeByOption(sizes.waist.gino[size])) {
           maxSize = size;
         }
-        if (hipsFloat >= convertSmToInches(sizes.hips.gino[size])) {
+        if (hipsFloat >= getSizeByOption(sizes.hips.gino[size])) {
           maxSize = size;
         }
         return size;
@@ -134,17 +134,6 @@ const SizeGuide = () => {
       if (maxSize) setCalculateSize(maxSize);
     }
   };
-
-  const _focusNextField = (nextField, nameField) => {
-    if (
-      nextField &&
-      nextField.current &&
-      nextField.current.refs &&
-      nextField.current.refs[nameField]
-    ) {
-      nextField.current.refs[nameField].focus();
-    }
-  }
 
   return (
     <Fragment>
@@ -209,20 +198,22 @@ const SizeGuide = () => {
                     }}
                     keyboardType="numeric"
                     returnKeyType={IS_IOS ? 'done' : 'next'}
+                    maxLength={6}
                   />
                 </View>
                 <View style={styles.inputWrapMiddle}>
-                  <Text style={styles.swithText}>Weist</Text>
+                  <Text style={styles.swithText}>Waist</Text>
                   <InputText
                     styleInputInner={styles.input}
-                    placeholder="Weist"
-                    value={weist}
+                    placeholder="Waist"
+                    value={waist}
                     onChange={text => {
                       setCalculateSize('');
-                      setWeist(text);
+                      setWaist(text);
                     }}
                     keyboardType="numeric"
                     returnKeyType={IS_IOS ? 'done' : 'next'}
+                    maxLength={6}
                   />
                 </View>
                 <View style={styles.inputWrap}>
@@ -237,6 +228,7 @@ const SizeGuide = () => {
                     }}
                     returnKeyType="done"
                     keyboardType="numeric"
+                    maxLength={6}
                   />
                 </View>
               </View>
