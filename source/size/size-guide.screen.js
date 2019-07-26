@@ -112,7 +112,7 @@ const SizeGuide = () => {
   }
 
   const calculate = () => {
-    setCalculateSize();
+    setCalculateSize('');
     Keyboard.dismiss();
     if (validate()) {
       const bustFloat = parseFloat(bust);
