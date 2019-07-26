@@ -273,6 +273,7 @@ exports[`renders correctly 1`] = `
                 autoFocus={false}
                 editable={true}
                 keyboardType="numeric"
+                maxLength={6}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={[Function]}
@@ -316,7 +317,7 @@ exports[`renders correctly 1`] = `
                 }
               }
             >
-              Weist
+              Waist
             </Text>
             <View
               style={
@@ -340,10 +341,11 @@ exports[`renders correctly 1`] = `
                 autoFocus={false}
                 editable={true}
                 keyboardType="numeric"
+                maxLength={6}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={[Function]}
-                placeholder="Weist"
+                placeholder="Waist"
                 rejectResponderTermination={true}
                 returnKeyType="done"
                 secureTextEntry={false}
@@ -406,6 +408,7 @@ exports[`renders correctly 1`] = `
                 autoFocus={false}
                 editable={true}
                 keyboardType="numeric"
+                maxLength={6}
                 multiline={false}
                 numberOfLines={1}
                 onChangeText={[Function]}
