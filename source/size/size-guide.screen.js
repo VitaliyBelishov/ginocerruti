@@ -9,6 +9,9 @@ import {
   Image,
   Switch,
   Keyboard,
+  Modal,
+  ScrollView,
+  TouchableHighlight,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Button from '../form/button.js';
@@ -37,18 +40,20 @@ const SizeGuide = () => {
   const [bust, setBust] = useState('');
   const [waist, setWaist] = useState('');
   const [hips, setHips] = useState('');
+  const [collection, setCollection] = useState(collectionsList[0]);
+  const [modal, setModal] = useState(false);
   const [userCountry, setUserCountry] = useState();
   const [errorMessage, setErrorMessage] = useState([]);
 
   useEffect(() => setUserCountry(DeviceInfo.getDeviceCountry()), []);
 
-  const getSizeByOption = (value: number) => {
+  const getSizeByOption = (value: number): number => {
     if (sizeOption === 'sm') return value;
     return (value / 2.54).toFixed(2);
   }
 
   const validate = (): boolean => {
-    setErrorMessage([]);
+    // setErrorMessage([]);
     const bustFloat = parseFloat(bust);
     const waistFloat = parseFloat(waist);
     const hipsFloat = parseFloat(hips);
@@ -143,6 +148,52 @@ const SizeGuide = () => {
 
   return (
     <Fragment>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modal}
+      >
+        <SafeAreaView style={styles.safeAreaModal}>
+          <View style={styles.headerModalContainer}>
+            <View style={styles.inputWrap} />
+            <View style={styles.doubleFlex}>
+              <Text style={styles.textModalHeader}>
+                Select collection
+              </Text>
+            </View>
+            <TouchableHighlight
+              style={styles.inputWrap}
+              onPress={() => setModal(false)}
+              hitSlop={{ top: 10, left: 10, bottom: 10, right: 10 }}
+            >
+              <Text style={styles.textModalHeaderClose}>Close</Text>
+            </TouchableHighlight>
+          </View>
+          <ScrollView style={styles.inputWrap}>
+            <Fragment>
+              {
+                collectionsList.map(id => {
+                  const isActive = collection === id;
+                  return (
+                    <TouchableHighlight
+                      key={id}
+                      style={[styles.sectionModal, isActive && styles.activeSectionModal]}
+                      onPress={() => {
+                        setCollection(id);
+                        setModal(false);
+                      }}
+                    >
+                      <Text>
+                        {collections[id].name}
+                      </Text>
+                    </TouchableHighlight>
+                  );
+                })
+              }
+            </Fragment>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <KeyboardAwareScrollView
@@ -161,9 +212,11 @@ const SizeGuide = () => {
               <Button
                 whiteBordered
                 style={styles.button}
-                onPress={() => {}}
+                onPress={() => setModal(true)}
               >
-                <Text style={styles.buttonText}>Evening Wear</Text>
+                <Text style={styles.buttonText}>
+                  {collections[collection].name}
+                </Text>
               </Button>
               <Image
                 resizeMode="contain"
@@ -172,7 +225,7 @@ const SizeGuide = () => {
               />
             </View>
             <TitleText text="Size calculator" />
-            <View style={styles.calculateContainer}>
+            <View>
               <Text style={styles.calculateText}>
                 {`Using size chart: ${collectionsList.map(id => collections[id].name).join(', ')}`}
               </Text>
@@ -203,9 +256,13 @@ const SizeGuide = () => {
                       setBust(text);
                     }}
                     keyboardType="numeric"
-                    returnKeyType={IS_IOS ? 'done' : 'next'}
+                    // returnKeyType={IS_IOS ? 'done' : 'next'}
                     maxLength={6}
-                    onSubmitEditing={() => calculate()}
+                    returnKeyType="next"
+                    // onSubmitEditing={() => {
+                    //   validate();
+                    //   calculate();
+                    // }}
                   />
                 </View>
                 <View style={styles.inputWrapMiddle}>
@@ -219,8 +276,9 @@ const SizeGuide = () => {
                       setWaist(text);
                     }}
                     keyboardType="numeric"
-                    returnKeyType={IS_IOS ? 'done' : 'next'}
+                    // returnKeyType={IS_IOS ? 'done' : 'next'}
                     maxLength={6}
+                    returnKeyType="next"
                   />
                 </View>
                 <View style={styles.inputWrap}>
@@ -233,9 +291,10 @@ const SizeGuide = () => {
                       setCalculateSize('');
                       setHips(text);
                     }}
-                    returnKeyType="done"
+                    // returnKeyType="done"
                     keyboardType="numeric"
                     maxLength={6}
+                    returnKeyType="next"
                   />
                 </View>
               </View>
@@ -301,7 +360,6 @@ const SizeGuide = () => {
                   Calculate
                 </Text>
               </Button>
-              <TitleText text="Size Charts" />
             </View>
           </Fragment>
         </KeyboardAwareScrollView>

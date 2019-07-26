@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: mixins.indent.medial,
     paddingHorizontal: mixins.indent.big,
+    borderColor: mixins.color.greyBorderInput,
+    borderWidth: 1,
   },
   buttonText: {
     fontSize: mixins.indent.medium,
@@ -38,9 +40,6 @@ const styles = StyleSheet.create({
   },
   collectionsText: {
     fontSize: 18,
-  },
-  calculateContainer: {
-    // marginTop: mixins.indent.middle,
   },
   switchContainer: {
     flexDirection: 'row',
@@ -142,6 +141,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
+  safeAreaModal: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+  doubleFlex: {
+    flexShrink: 0,
+  },
+  headerModalContainer: {
+    height: 55,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderColor: mixins.color.greyBorderInput,
+  },
+  textModalHeader: {
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  textModalHeaderClose: {
+    textAlign: 'center',
+  },
+  sectionModal: {
+    height: 40,
+    paddingLeft: 15,
+    justifyContent: 'center',
+  },
+  activeSectionModal: {
+    backgroundColor: mixins.color.orange,
+  }
 });
 
 export default styles;
