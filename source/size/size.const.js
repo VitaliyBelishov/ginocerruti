@@ -1,3 +1,28 @@
+export const collections = {
+  '1': {
+    id: '1',
+    name: 'Bridesmaids',
+  },
+  '2': {
+    id: '2',
+    name: 'Evening Wear',
+  },
+  '3': {
+    id: '3',
+    name: 'Prom Dresses',
+  },
+  '4': {
+    id: '4',
+    name: 'Lenovia Bridal',
+  },
+  '5': {
+    id: '5',
+    name: 'LENOVIA VIP',
+  },
+};
+
+export const collectionsList = ['1', '2', '3', '4', '5'];
+
 export const sizesList = ['XXXS','XXS','XS','S','M','L','XL','2XL','3XL','4XL','5XL','6XL','7XL','8XL'];
 
 export const sizes = {

@@ -12,7 +12,7 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Button from '../form/button.js';
 import InputText from '../form/input-text.js';
-import { sizes, sizesList } from '../size/size.const.js';
+import { sizes, sizesList, collections, collectionsList } from '../size/size.const.js';
 
 import mixins, { IS_IOS } from '../app/styles.js';
 import styles from './size-guide.screen.style.js';
@@ -179,7 +179,7 @@ const SizeGuide = () => {
             <TitleText text="Size calculator" />
             <View style={styles.calculateContainer}>
               <Text style={styles.calculateText}>
-                Using size chart: Bridesmaids, Evening Wear, Prom Dresses,Lenovia Bridal ,LENOVIA VIP
+                {`Using size chart: ${collectionsList.map(id => collections[id].name).join(', ')}`}
               </Text>
               <View style={styles.switchContainer}>
                 <Text style={styles.marginRight}>cm</Text>
