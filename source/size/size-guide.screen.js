@@ -129,19 +129,18 @@ const SizeGuide = () => {
       const bustFloat = parseFloat(bust);
       const waistFloat = parseFloat(waist);
       const hipsFloat = parseFloat(hips);
-      let maxSize = '';
-      sizesList.map(size => {
+      const maxSize = sizesList.reduce((acc, size) => {
         if (bustFloat >= getSizeByOption(sizes.bust.gino[size])) {
-          maxSize = size;
+          acc = size;
         }
         if (waistFloat >= getSizeByOption(sizes.waist.gino[size])) {
-          maxSize = size;
+          acc = size;
         }
         if (hipsFloat >= getSizeByOption(sizes.hips.gino[size])) {
-          maxSize = size;
+          acc = size;
         }
-        return size;
-      });
+        return acc;
+      }, '');
       if (maxSize) setCalculateSize(maxSize);
     }
   };
@@ -256,13 +255,8 @@ const SizeGuide = () => {
                       setBust(text);
                     }}
                     keyboardType="numeric"
-                    // returnKeyType={IS_IOS ? 'done' : 'next'}
+                    returnKeyType={IS_IOS ? 'done' : 'next'}
                     maxLength={6}
-                    returnKeyType="next"
-                    // onSubmitEditing={() => {
-                    //   validate();
-                    //   calculate();
-                    // }}
                   />
                 </View>
                 <View style={styles.inputWrapMiddle}>
@@ -276,9 +270,8 @@ const SizeGuide = () => {
                       setWaist(text);
                     }}
                     keyboardType="numeric"
-                    // returnKeyType={IS_IOS ? 'done' : 'next'}
+                    returnKeyType={IS_IOS ? 'done' : 'next'}
                     maxLength={6}
-                    returnKeyType="next"
                   />
                 </View>
                 <View style={styles.inputWrap}>
@@ -291,10 +284,9 @@ const SizeGuide = () => {
                       setCalculateSize('');
                       setHips(text);
                     }}
-                    // returnKeyType="done"
+                    returnKeyType="done"
                     keyboardType="numeric"
                     maxLength={6}
-                    returnKeyType="next"
                   />
                 </View>
               </View>
@@ -345,8 +337,8 @@ const SizeGuide = () => {
                 ) : null
               }
               {
-                errorMessage.map(error => (
-                  <Text style={styles.errorText}>
+                errorMessage.map((error, i) => (
+                  <Text key={i} style={styles.errorText}>
                     {error}
                   </Text>
                 ))
