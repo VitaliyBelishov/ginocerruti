@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     backgroundColor: mixins.color.white,
   },
   image: {
+    marginTop: mixins.indent.default,
     width: DEVICE_WIDTH,
     height: DEVICE_WIDTH,
   },
@@ -85,10 +86,13 @@ const styles = StyleSheet.create({
     color: mixins.color.grayText,
   },
   calculateText: {
-    fontSize: mixins.font.default,
+    fontSize: mixins.font.bigFont,
   },
   calculateResultTextBold: {
     fontWeight: '500',
+  },
+  errorText: {
+    color: mixins.color.red,
   },
 });
 

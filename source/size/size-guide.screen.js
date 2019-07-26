@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useRef } from 'react';
+import React, { useState, Fragment, useRef, useEffect } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
   SafeAreaView,
@@ -31,34 +31,108 @@ const SizeGuide = () => {
   const [bust, setBust] = useState('');
   const [weist, setWeist] = useState('');
   const [hips, setHips] = useState('');
+  const [userCountry, setUserCountry] = useState();
+  const [errorMessage, setErrorMessage] = useState([]);
   const bustRef = useRef(null);
   const weistRef = useRef(null);
   const hipsRef = useRef(null);
+
+  useEffect(() => setUserCountry(DeviceInfo.getDeviceCountry()), []);
 
   const convertSmToInches = value => {
     if (sizeOption === 'sm') return value;
     return (value / 2.54).toFixed(2);
   }
 
-  const calculate = () => {
-    Keyboard.dismiss();
+  const validate = () => {
+    setErrorMessage([]);
     const bustFloat = parseFloat(bust);
     const weistFloat = parseFloat(weist);
     const hipsFloat = parseFloat(hips);
-    let maxSize = '';
-    sizesList.map(size => {
-      if (bustFloat >= convertSmToInches(sizes.bust.gino[size])) {
-        maxSize = size;
-      }
-      if (weistFloat >= convertSmToInches(sizes.weist.gino[size])) {
-        maxSize = size;
-      }
-      if (hipsFloat >= convertSmToInches(sizes.hips.gino[size])) {
-        maxSize = size;
-      }
-      return size;
-    });
-    if (maxSize) setCalculateSize(maxSize);
+    let message = [];
+    if (!bustFloat) {
+      message = message.concat('Bust is required');
+    }
+    const bustFirstSize = convertSmToInches(sizes.bust.gino[sizesList[0]]);
+    if (bustFloat && bustFloat < bustFirstSize) {
+      message = message.concat(
+        `Bust please enter a value greater than or equal to ${bustFirstSize}.`
+      );
+    }
+    const bustLastSize = convertSmToInches(
+      sizes.bust.gino[sizesList[sizesList.length - 1]]
+    );
+    if (bustFloat && bustFloat > bustLastSize) {
+      message = message.concat(
+        `Bust please enter a value less than or equal to ${bustLastSize}.`
+      );
+    }
+
+    if (!weistFloat) {
+      message = message.concat('Weist is required');
+    }
+    const weistFirstSize = convertSmToInches(sizes.weist.gino[sizesList[0]]);
+    if (weistFloat && weistFloat < weistFirstSize) {
+      message = message.concat(
+        `Weist please enter a value greater than or equal to ${weistFirstSize}.`
+      );
+    }
+    const weistLastSize = convertSmToInches(
+      sizes.weist.gino[sizesList[sizesList.length - 1]]
+    );
+    if (weistFloat && weistFloat > weistLastSize) {
+      message = message.concat(
+        `Weist please enter a value less than or equal to ${weistLastSize}.`
+      );
+    }
+
+    if (!hipsFloat) {
+      message = message.concat('Hips is required');
+    }
+    const hipsFirstSize = convertSmToInches(sizes.hips.gino[sizesList[0]]);
+    if (hipsFloat && hipsFloat < hipsFirstSize) {
+      message = message.concat(
+        `Hips please enter a value greater than or equal to ${hipsFirstSize}.`
+      );
+    }
+    const hipsLastSize = convertSmToInches(
+      sizes.hips.gino[sizesList[sizesList.length - 1]]
+    );
+    if (hipsFloat && hipsFloat > hipsLastSize) {
+      message = message.concat(
+        `Hips please enter a value less than or equal to ${hipsLastSize}.`
+      );
+    }
+
+    if (message.length) {
+      setErrorMessage(message);
+      return false;
+    }
+    return true;
+  }
+
+  const calculate = () => {
+    setCalculateSize();
+    Keyboard.dismiss();
+    if (validate()) {
+      const bustFloat = parseFloat(bust);
+      const weistFloat = parseFloat(weist);
+      const hipsFloat = parseFloat(hips);
+      let maxSize = '';
+      sizesList.map(size => {
+        if (bustFloat >= convertSmToInches(sizes.bust.gino[size])) {
+          maxSize = size;
+        }
+        if (weistFloat >= convertSmToInches(sizes.weist.gino[size])) {
+          maxSize = size;
+        }
+        if (hipsFloat >= convertSmToInches(sizes.hips.gino[size])) {
+          maxSize = size;
+        }
+        return size;
+      });
+      if (maxSize) setCalculateSize(maxSize);
+    }
   };
 
   const _focusNextField = (nextField, nameField) => {
@@ -71,7 +145,6 @@ const SizeGuide = () => {
       nextField.current.refs[nameField].focus();
     }
   }
-
 
   return (
     <Fragment>
@@ -95,14 +168,12 @@ const SizeGuide = () => {
                 style={styles.button}
                 onPress={() => {}}
               >
-                <Text style={styles.buttonText}>
-                  Evening Wear
-                </Text>
+                <Text style={styles.buttonText}>Evening Wear</Text>
               </Button>
               <Image
                 resizeMode="contain"
                 style={styles.image}
-                source={{ uri: 'https://ginocerruti.com/img/gc-size-guide.jpg' }}
+                source={require('../src/image/size-guide.jpg')}
               />
             </View>
             <TitleText text="Size calculator" />
@@ -111,9 +182,7 @@ const SizeGuide = () => {
                 Using size chart: Bridesmaids, Evening Wear, Prom Dresses,Lenovia Bridal ,LENOVIA VIP
               </Text>
               <View style={styles.switchContainer}>
-                <Text style={styles.marginRight}>
-                  cm
-                </Text>
+                <Text style={styles.marginRight}>cm</Text>
                 <Switch
                   value={sizeOption === 'inches'}
                   style={styles.marginRight}
@@ -125,63 +194,55 @@ const SizeGuide = () => {
                   ios_backgroundColor={mixins.color.green}
                   onValueChange={res => setSizeOption(res ? 'inches' : 'sm')}
                 />
-                <Text style={styles.marginRight}>
-                  inches
-                </Text>
+                <Text style={styles.marginRight}>inches</Text>
               </View>
               <View style={styles.inputContainer}>
                 <View style={styles.inputWrap}>
-                  <Text style={styles.swithText}>
-                    Bust
-                  </Text>
+                  <Text style={styles.swithText}>Bust</Text>
                   <InputText
                     styleInputInner={styles.input}
                     placeholder="Bust"
                     value={bust}
-                    onChange={text => setBust(text)}
+                    onChange={text => {
+                      setCalculateSize('');
+                      setBust(text);
+                    }}
                     keyboardType="numeric"
                     returnKeyType={IS_IOS ? 'done' : 'next'}
-                    ref={bustRef}
-                    name="bustRef"
-                    {...(IS_IOS ? {} : { onSubmitEditing: () => _focusNextField(weistRef, 'weistRef')})}
                   />
                 </View>
                 <View style={styles.inputWrapMiddle}>
-                  <Text style={styles.swithText}>
-                    Weist
-                  </Text>
+                  <Text style={styles.swithText}>Weist</Text>
                   <InputText
                     styleInputInner={styles.input}
                     placeholder="Weist"
                     value={weist}
-                    onChange={text => setWeist(text)}
+                    onChange={text => {
+                      setCalculateSize('');
+                      setWeist(text);
+                    }}
                     keyboardType="numeric"
                     returnKeyType={IS_IOS ? 'done' : 'next'}
-                    ref={weistRef}
-                    name="weistRef"
-                    {...(IS_IOS ? {} : { onSubmitEditing: () => _focusNextField(hipsRef, 'hipsRef')})}
                   />
                 </View>
                 <View style={styles.inputWrap}>
-                  <Text style={styles.swithText}>
-                    Hips
-                  </Text>
+                  <Text style={styles.swithText}>Hips</Text>
                   <InputText
                     styleInputInner={styles.input}
                     placeholder="Hips"
                     value={hips}
-                    onChange={text => setHips(text)}
+                    onChange={text => {
+                      setCalculateSize('');
+                      setHips(text);
+                    }}
                     returnKeyType="done"
                     keyboardType="numeric"
-                    ref={hipsRef}
-                    name="hipsRef"
-                    onSubmitEditing={calculate}
                   />
                 </View>
               </View>
               {
                 calculateSize ? (
-                  <View style={{ flex: 1 }}>
+                  <View style={styles.inputWrap}>
                     <Text style={styles.calculateText}>
                       Your size is:
                       <Text style={styles.calculateResultTextBold}>
@@ -194,8 +255,25 @@ const SizeGuide = () => {
                         {` ${sizes.UK.gino[calculateSize]}`}
                       </Text>
                     </Text>
+                    {
+                      userCountry && sizes[userCountry] ? (
+                        <Text style={styles.calculateText}>
+                          {`Your ${userCountry} Size is:`}
+                          <Text style={styles.calculateResultTextBold}>
+                            {` ${sizes[userCountry].gino[calculateSize]}`}
+                          </Text>
+                        </Text>
+                      ) : null
+                    }
                   </View>
                 ) : null
+              }
+              {
+                errorMessage.map(error => (
+                  <Text style={styles.errorText}>
+                    {error}
+                  </Text>
+                ))
               }
               <Button
                 style={styles.buttonCal}
