@@ -242,30 +242,48 @@ const SizeGuide = () => {
               </View>
               {
                 calculateSize ? (
-                  <View style={styles.inputWrap}>
-                    <Text style={styles.calculateText}>
-                      Your size is:
-                      <Text style={styles.calculateResultTextBold}>
-                        {` ${calculateSize}`}
-                      </Text>
+                  <Fragment>
+                    <Text style={styles.headingCalculate}>
+                      You recomendendet size:
                     </Text>
-                    <Text style={styles.calculateText}>
-                      Your UK Size is:
-                      <Text style={styles.calculateResultTextBold}>
-                        {` ${sizes.UK.gino[calculateSize]}`}
-                      </Text>
-                    </Text>
-                    {
-                      userCountry && sizes[userCountry] ? (
-                        <Text style={styles.calculateText}>
-                          {`Your ${userCountry} Size is:`}
-                          <Text style={styles.calculateResultTextBold}>
-                            {` ${sizes[userCountry].gino[calculateSize]}`}
-                          </Text>
+                    <View style={styles.calculateSectionsWrap}>
+                      <View style={styles.sectionLeft}>
+                        <Text style={styles.sectionText}>
+                          Gino size
                         </Text>
-                      ) : null
-                    }
-                  </View>
+                        <View style={styles.ginoSize}>
+                          <Text style={[styles.ginoSizeText, calculateSize.length === 4 && { fontSize: 30 }]}>
+                            {calculateSize}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View style={styles.sectionRight}>
+                        <View style={styles.sectionRightWrap}>
+                          <View>
+                            <Text style={styles.sectionText}>
+                              UK
+                            </Text>
+                            <Text style={styles.giniSizeRusult}>
+                              {sizes.UK.gino[calculateSize]}
+                            </Text>
+                          </View>
+                          {
+                            userCountry && sizes[userCountry] ? (
+                              <View>
+                                <Text style={styles.sectionText}>
+                                  {userCountry}
+                                </Text>
+                                <Text style={styles.giniSizeRusult}>
+                                  {sizes[userCountry].gino[calculateSize]}
+                                </Text>
+                              </View>
+                            ) : null
+                          }
+                        </View>
+                      </View>
+                    </View>
+                  </Fragment>
                 ) : null
               }
               {

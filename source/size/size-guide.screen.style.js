@@ -94,6 +94,54 @@ const styles = StyleSheet.create({
   errorText: {
     color: mixins.color.red,
   },
+  headingCalculate: {
+    color: mixins.color.dark,
+    fontSize: 18,
+    paddingVertical: mixins.indent.medial,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  calculateSectionsWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    paddingVertical: mixins.indent.middle,
+    borderRadius: 1,
+  },
+  sectionLeft: {
+    flexShrink: 0,
+  },
+  sectionText: {
+    color: mixins.color.grayText,
+    fontSize: mixins.font.bigFont,
+  },
+  ginoSize: {
+    marginTop: mixins.indent.middle,
+    width: DEVICE_WIDTH / 3,
+    height: DEVICE_WIDTH / 3,
+    backgroundColor: mixins.color.orange,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  ginoSizeText: {
+    color: mixins.color.dark,
+    fontSize: 50,
+    fontWeight: 'bold',
+  },
+  sectionRight: {
+    paddingLeft: mixins.indent.big,
+    alignItems: 'center',
+  },
+  giniSizeRusult: {
+    color: mixins.color.dark,
+    fontSize: 35,
+    fontWeight: 'bold',
+  },
+  sectionRightWrap: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
 });
 
 export default styles;

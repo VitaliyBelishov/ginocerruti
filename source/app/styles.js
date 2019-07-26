@@ -14,6 +14,7 @@ const mixins = {
     greyBorderInput: '#e0e0e0',
     grayText: '#4c4c4c',
     red: '#F90001',
+    dark: '#363636',
   },
   indent: {
     mini: 2,
