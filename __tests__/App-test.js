@@ -10,7 +10,6 @@ import Sizes from '../source/size/size-guide.screen.js';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', () => {
-  renderer.create(<Sizes />);
   const snap = renderer
     .create(<Sizes />)
     .toJSON();
