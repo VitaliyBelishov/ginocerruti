@@ -19,7 +19,7 @@ import {
   sizesTest,
   sizesTestNoGino,
   sizesListTest,
-} from '../source/size/size.const.js';
+} from '../source/size/test.const.js';
 
 it('renders correctly', () => {
   const snap = renderer
