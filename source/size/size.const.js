@@ -1,4 +1,13 @@
-export const collections = {
+// @flow
+
+export type Collection = {|
+  name: string,
+  id: string,
+|};
+
+export type Collections = { [collectionId: string]: Collection };
+
+export const collections: Collections = {
   '1': {
     id: '1',
     name: 'Bridesmaids',
@@ -21,11 +30,24 @@ export const collections = {
   },
 };
 
-export const collectionsList = ['1', '2', '3', '4', '5'];
+export type CollectionsList = string[];
 
-export const sizesList = ['XXXS','XXS','XS','S','M','L','XL','2XL','3XL','4XL','5XL','6XL','7XL','8XL'];
+export const collectionsList: CollectionsList = ['1', '2', '3', '4', '5'];
 
-export const sizes = {
+export type SizesList = string[];
+
+export const sizesList: SizesList = ['XXXS','XXS','XS','S','M','L','XL','2XL','3XL','4XL','5XL','6XL','7XL','8XL'];
+
+export type Gino = { [GinoId: string]: number };
+
+export type Size = {|
+  name: string,
+  gino: Gino,
+|};
+
+export type Sizes = { [sizeId: string]: Size };
+
+export const sizes: Sizes = {
   bust: {
     name: 'Bust',
     gino: {

@@ -1,3 +1,4 @@
+// @flow
 import React, { useState, Fragment, useRef, useEffect } from 'react';
 import DeviceInfo from 'react-native-device-info';
 import {
@@ -12,12 +13,17 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Button from '../form/button.js';
 import InputText from '../form/input-text.js';
-import { sizes, sizesList, collections, collectionsList } from '../size/size.const.js';
+import {
+  sizes,
+  sizesList,
+  collections,
+  collectionsList,
+} from '../size/size.const.js';
 
 import mixins, { IS_IOS } from '../app/styles.js';
 import styles from './size-guide.screen.style.js';
 
-const TitleText = props => (
+const TitleText = (props: { text: string }) => (
   <View style={styles.titleView}>
     <Text style={styles.titleText}>
       {props.text}
@@ -36,12 +42,12 @@ const SizeGuide = () => {
 
   useEffect(() => setUserCountry(DeviceInfo.getDeviceCountry()), []);
 
-  const getSizeByOption = value => {
+  const getSizeByOption = (value: number) => {
     if (sizeOption === 'sm') return value;
     return (value / 2.54).toFixed(2);
   }
 
-  const validate = () => {
+  const validate = (): boolean => {
     setErrorMessage([]);
     const bustFloat = parseFloat(bust);
     const waistFloat = parseFloat(waist);
@@ -199,6 +205,7 @@ const SizeGuide = () => {
                     keyboardType="numeric"
                     returnKeyType={IS_IOS ? 'done' : 'next'}
                     maxLength={6}
+                    onSubmitEditing={() => calculate()}
                   />
                 </View>
                 <View style={styles.inputWrapMiddle}>
@@ -236,7 +243,7 @@ const SizeGuide = () => {
                 calculateSize ? (
                   <Fragment>
                     <Text style={styles.headingCalculate}>
-                      You recomendendet size:
+                      Your recommendended size:
                     </Text>
                     <View style={styles.calculateSectionsWrap}>
                       <View style={styles.sectionLeft}>

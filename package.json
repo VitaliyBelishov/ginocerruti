@@ -6,9 +6,11 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
+    "flow": "flow",
     "packager": "react-native start --reset-cache"
   },
   "dependencies": {
+    "flow": "^0.2.3",
     "react": "16.8.6",
     "react-native": "0.60.4",
     "react-native-device-info": "^2.3.0",
