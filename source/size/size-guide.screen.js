@@ -294,7 +294,7 @@ const SizeGuide = () => {
                 calculateSize ? (
                   <Fragment>
                     <Text style={styles.headingCalculate}>
-                      Your recommendended size:
+                      Your recommended size:
                     </Text>
                     <View style={styles.calculateSectionsWrap}>
                       <View style={styles.sectionLeft}>
